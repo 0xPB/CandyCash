@@ -1,7 +1,5 @@
 
 # CandyCash 🍬📈
-
-**Description:**  
 CandyCash is a playful financial dashboard that allows users to track stock performance and market trends in real time. Inspired by the candy universe, CandyCash makes financial analysis sweet and enjoyable! 🍭
 
 ## Features
@@ -27,30 +25,12 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
 - **Database**: SQL/NoSQL to store user data and preferences
 - **Socket.io**: Real-time communication for instant notifications
 
-### External API
-- [Financial API TBD]: Used to fetch real-time market data 🍬💹
+## 🖋️ Authors
 
-## Installation
+- Paul Bruno [LinkedIn](https://www.linkedin.com/in/paulbruno33)
+- Hugo Andrejewski [LinkedIn](https://www.linkedin.com/in/hugo-andrejewski-a0385b253)
+- Mathias Chauvet [LinkedIn](https://www.linkedin.com/in/mathias-chauvet-022447204)
 
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/your-username/CandyCash.git
-    ```
+## 📜 License
 
-2. Navigate into the project directory:
-    ```bash
-    cd CandyCash
-    ```
-
-3. Install dependencies:
-    ```bash
-    npm install
-    ```
-
-4. Start the development server:
-    ```bash
-    npm run serve
-    ```
-
-## License
-This project is licensed under the MIT License.
+This project is licensed under the GPLv3 License. See the `LICENSE` file for more information.
