@@ -1,30 +1,56 @@
-# CandyCash
 
-**Description :**  
-CandyCash est un dashboard financier ludique qui permet aux utilisateurs de suivre les performances des actions et des marchés financiers en temps réel. Inspiré par l'univers des bonbons, CandyCash rend l'analyse financière sucrée et agréable !
+# CandyCash 🍬📈
 
-## Fonctionnalités
+**Description:**  
+CandyCash is a playful financial dashboard that allows users to track stock performance and market trends in real time. Inspired by the candy universe, CandyCash makes financial analysis sweet and enjoyable! 🍭
 
-- Connexion utilisateur sécurisée
-- Suivi en temps réel des actions et autres données financières via une API externe
-- Visualisation de données sous forme de graphiques dynamiques
-- Gestion des favoris pour surveiller certaines actions de manière personnalisée
-- Notifications en temps réel des changements de marché
-- Interface intuitive avec un thème graphique inspiré des bonbons
+## Features
 
-## Technologies utilisées
+- 🔒 **Secure User Login**
+- 📊 **Real-time Stock Tracking** with external financial data API
+- 🍬 **Dynamic Data Visualization** with interactive charts
+- ⭐ **Favorites Management** to monitor specific stocks with personalized views
+- 🚨 **Real-time Notifications** for market changes
+- 🍭 **Intuitive Interface** with a candy-themed design
+
+## Technologies Used
 
 ### Frontend
-- **Vue.js** : Framework JavaScript pour construire l'interface utilisateur
-- **Vue Router** : Gestion de la navigation entre les différentes pages
-- **Vuex** : Gestion de l'état global de l'application
-- **Chart.js** : Affichage de graphiques financiers
+- **Vue.js**: JavaScript framework for building the user interface
+- **Vue Router**: Handles navigation between different pages
+- **Vuex**: Manages the global state of the application
+- **Chart.js**: Displays financial data as dynamic charts
 
 ### Backend
-- **Node.js** : Environnement de développement pour le serveur
-- **Express.js** : Framework web pour construire l'API
-- **Base de données** : Utilisation de SQL/NoSQL pour stocker les données utilisateur et les préférences
-- **Socket.io** : Gestion de la communication en temps réel pour des notifications instantanées
+- **Node.js**: Development environment for the server
+- **Express.js**: Web framework for building the API
+- **Database**: SQL/NoSQL to store user data and preferences
+- **Socket.io**: Real-time communication for instant notifications
 
-### API Externe
-- [API financière à définir] : Utilisée pour obtenir les données des marchés financiers en temps réel.
+### External API
+- [Financial API TBD]: Used to fetch real-time market data 🍬💹
+
+## Installation
+
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/your-username/CandyCash.git
+    ```
+
+2. Navigate into the project directory:
+    ```bash
+    cd CandyCash
+    ```
+
+3. Install dependencies:
+    ```bash
+    npm install
+    ```
+
+4. Start the development server:
+    ```bash
+    npm run serve
+    ```
+
+## License
+This project is licensed under the MIT License.
