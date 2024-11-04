@@ -1,17 +1,16 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const bcrypt = require('bcryptjs');
 
 const router = express.Router();
 
-// Route pour l'inscription des utilisateurs
+// Inscription
 router.post('/register', async (req, res) => {
-    const { username, email, password } = req.body;
+    const { firstName, lastName, age, gender, email, password, postalAddress } = req.body;
 
     try {
         // Vérifier que tous les champs sont remplis
-        if (!username || !email || !password) {
+        if (!firstName || !lastName || !age || !gender || !email || !password || !postalAddress) {
             return res.status(400).json({ error: 'Tous les champs sont requis' });
         }
 
@@ -23,33 +22,31 @@ router.post('/register', async (req, res) => {
 
         // Hacher le mot de passe
         const hashedPassword = await bcrypt.hash(password, 10);
-        
+
         // Créer un nouvel utilisateur
         const newUser = new User({
-            username,
+            firstName,
+            lastName,
+            age,
+            gender,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            postalAddress,
         });
 
-        // Sauvegarder l'utilisateur dans MongoDB
+        // Sauvegarder l'utilisateur dans la base de données
         await newUser.save();
         res.status(201).json({ message: 'Utilisateur créé avec succès' });
     } catch (error) {
-        console.error('Erreur lors de l\'inscription :', error);
         res.status(500).json({ error: 'Erreur lors de l\'inscription' });
     }
 });
 
-// Route pour la connexion des utilisateurs
+// Connexion
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Vérifier que tous les champs sont remplis
-        if (!email || !password) {
-            return res.status(400).json({ error: 'Tous les champs sont requis' });
-        }
-
         // Vérifier si l'utilisateur existe
         const user = await User.findOne({ email });
         if (!user) {
@@ -62,14 +59,10 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ error: 'Mot de passe incorrect' });
         }
 
-        // Créer un token JWT pour l'utilisateur
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
+        res.status(200).json({ message: 'Connexion réussie', user });
     } catch (error) {
-        console.error('Erreur lors de la connexion :', error);
         res.status(500).json({ error: 'Erreur lors de la connexion' });
     }
 });
 
 module.exports = router;
-
