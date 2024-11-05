@@ -1,12 +1,10 @@
+// models/Investment.js
 const mongoose = require('mongoose');
 
-// Schéma des investissements
 const investmentSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    amount: { type: Number, required: true },
-    date: { type: Date, default: Date.now },
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
-});
+    stock: { type: String, required: true },
+    quantity: { type: Number, required: true },
+    price: { type: Number, required: true },
+}, { timestamps: true });
 
-const Investment = mongoose.model('Investment', investmentSchema);
-module.exports = Investment;
+module.exports = mongoose.model('Investment', investmentSchema);

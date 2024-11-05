@@ -1,48 +1,52 @@
+// investmentRoutes.js
 const express = require('express');
-const Investment = require('../models/Investment');
-
+const axios = require('axios');
+const Investment = require('../models/Investment'); // Modèle MongoDB
 const router = express.Router();
 
-// Ajouter un nouvel investissement
-router.post('/', async (req, res) => {
-    const { name, amount, userId } = req.body;
-
+// Route pour récupérer tous les investissements
+router.get('/all', async (req, res) => {
     try {
-        const newInvestment = new Investment({ name, amount, userId });
+        const investments = await Investment.find();
+        res.json(investments);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des investissements:", error);
+        res.status(500).json({ error: "Erreur lors de la récupération des investissements" });
+    }
+});
+
+// Route pour récupérer le prix d'une action spécifique
+router.get('/stocks/:ticker', async (req, res) => {
+    const { ticker } = req.params;
+    try {
+        const response = await axios.get(`https://api.polygon.io/v2/aggs/ticker/${ticker}/prev`, {
+            params: {
+                adjusted: true,
+                apiKey: process.env.POLYGON_API_KEY,
+            },
+        });
+        const price = response.data.results[0]?.c;
+        if (price) {
+            res.json({ price });
+        } else {
+            res.status(404).json({ error: "Données non trouvées pour l'action sélectionnée." });
+        }
+    } catch (error) {
+        console.error('Erreur lors de la récupération du prix de l’action:', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des données de Polygon pour les actions.' });
+    }
+});
+
+// Nouvelle route pour enregistrer l'investissement
+router.post('/save', async (req, res) => {
+    const { stock, quantity, price } = req.body;
+    try {
+        const newInvestment = new Investment({ stock, quantity, price });
         await newInvestment.save();
-        res.status(201).json(newInvestment);
+        res.status(201).json({ message: "Investissement enregistré avec succès" });
     } catch (error) {
-        res.status(500).json({ error: 'Erreur lors de l\'ajout de l\'investissement' });
-    }
-});
-
-// Récupérer les investissements de l'utilisateur
-router.get('/:userId', async (req, res) => {
-    try {
-        const investments = await Investment.find({ userId: req.params.userId });
-        res.status(200).json(investments);
-    } catch (error) {
-        res.status(500).json({ error: 'Erreur lors de la récupération des investissements' });
-    }
-});
-
-// Mettre à jour un investissement
-router.put('/:id', async (req, res) => {
-    try {
-        const updatedInvestment = await Investment.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.status(200).json(updatedInvestment);
-    } catch (error) {
-        res.status(500).json({ error: 'Erreur lors de la mise à jour de l\'investissement' });
-    }
-});
-
-// Supprimer un investissement
-router.delete('/:id', async (req, res) => {
-    try {
-        await Investment.findByIdAndDelete(req.params.id);
-        res.status(200).json({ message: 'Investissement supprimé' });
-    } catch (error) {
-        res.status(500).json({ error: 'Erreur lors de la suppression de l\'investissement' });
+        console.error("Erreur lors de l'enregistrement de l'investissement:", error);
+        res.status(500).json({ error: "Erreur lors de l'enregistrement de l'investissement" });
     }
 });
 

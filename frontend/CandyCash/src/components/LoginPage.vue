@@ -18,8 +18,29 @@ export default {
     };
   },
   methods: {
-    login() {
-      alert(`Connexion avec l'email : ${this.email}`);
+    async login() {
+      try {
+        const response = await fetch('http://localhost:5000/api/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: this.email,
+            password: this.password,
+          }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          alert('Connexion réussie');
+          // Rediriger vers la page de profil
+          this.$router.push('/profile');
+        } else {
+          alert(data.error);
+        }
+      } catch (error) {
+        console.error('Erreur de connexion', error);
+      }
     },
   },
 };

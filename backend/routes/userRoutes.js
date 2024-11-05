@@ -1,6 +1,5 @@
 const express = require('express');
 const User = require('../models/User');
-const bcrypt = require('bcryptjs');
 
 const router = express.Router();
 
@@ -20,17 +19,14 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ error: 'L\'utilisateur existe déjà' });
         }
 
-        // Hacher le mot de passe
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Créer un nouvel utilisateur
+        // Créer un nouvel utilisateur sans hachage du mot de passe
         const newUser = new User({
             firstName,
             lastName,
             age,
             gender,
             email,
-            password: hashedPassword,
+            password,  // Mot de passe en clair (non sécurisé)
             postalAddress,
         });
 
@@ -53,9 +49,8 @@ router.post('/login', async (req, res) => {
             return res.status(404).json({ error: 'Utilisateur non trouvé' });
         }
 
-        // Vérifier le mot de passe
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
+        // Comparaison directe du mot de passe en clair
+        if (user.password !== password) {
             return res.status(400).json({ error: 'Mot de passe incorrect' });
         }
 
