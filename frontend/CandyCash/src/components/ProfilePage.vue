@@ -1,5 +1,6 @@
 <template>
   <div class="profile-page">
+    <Navbar />
     <h1>Calcul de la valeur de vos actions</h1>
 
     <!-- Sélection de l'action -->
@@ -26,16 +27,20 @@
 
 <script>
 import axios from 'axios';
+import Navbar from '@/components/Navbar.vue'; // Assurez-vous que le chemin est correct
 
 export default {
+  components: {
+    Navbar,
+  },
   data() {
     return {
       selectedStock: '',
       stockPrice: null,
       quantity: 1,
       totalValue: null,
-      sp500Tickers: [], // Liste des tickers du S&P 500
-      userId: 'exampleUserId', // Utiliser une valeur d'exemple, assurez-vous de la remplacer par le vrai ID utilisateur
+      sp500Tickers: [],
+      userId: localStorage.getItem('userId'), // Récupérer l'ID utilisateur depuis localStorage
     };
   },
   methods: {
@@ -45,7 +50,6 @@ export default {
           const response = await axios.get(`http://localhost:5000/api/investments/stocks/${this.selectedStock}`);
           this.stockPrice = response.data.price;
           this.calculateValue();
-          console.log("Prix de l'action récupéré :", this.stockPrice);
         } catch (error) {
           console.error('Erreur lors de la récupération du prix de l’action:', error);
           this.stockPrice = null;
@@ -56,50 +60,42 @@ export default {
     calculateValue() {
       if (this.stockPrice !== null && this.quantity > 0) {
         this.totalValue = (this.stockPrice * this.quantity).toFixed(2);
-        console.log("Valeur totale calculée :", this.totalValue);
       } else {
         this.totalValue = null;
       }
     },
     async saveInvestment() {
-      console.log("Tentative d'enregistrement de l'investissement...");
-      if (!this.selectedStock || !this.quantity || !this.stockPrice) {
-        alert("Veuillez remplir tous les champs.");
-        console.log("Champs manquants : ", {
-          selectedStock: this.selectedStock,
-          quantity: this.quantity,
-          stockPrice: this.stockPrice,
-        });
-        return;
-      }
+      console.log("Tentative d'enregistrement de l'investissement...", {
+        stock: this.selectedStock,
+        quantity: this.quantity,
+        price: this.stockPrice,
+        userId: this.userId, // Assurez-vous que l'ID utilisateur est utilisé
+      });
 
       try {
-        const response = await axios.post('http://localhost:5000/api/investments/save', {
+        await axios.post('http://localhost:5000/api/investments/save', {
           stock: this.selectedStock,
           quantity: this.quantity,
           price: this.stockPrice,
           userId: this.userId, // Envoie userId avec les autres informations d'investissement
         });
-        alert("Investissement enregistré avec succès !");
-        console.log("Réponse de l'enregistrement :", response.data);
+        alert("Investissement enregistré !");
       } catch (error) {
         console.error("Erreur lors de l'enregistrement de l'investissement:", error);
-        if (error.response) {
-          console.log("Détails de l'erreur de réponse :", error.response.data);
-        }
+        alert("Erreur lors de l'enregistrement de l'investissement"); // Affiche une alerte en cas d'erreur
       }
     },
     async fetchSp500Tickers() {
       try {
         const response = await axios.get('http://localhost:5000/api/investments/stocks/sp500');
         this.sp500Tickers = response.data;
-        console.log("Tickers S&P 500 récupérés :", this.sp500Tickers);
       } catch (error) {
         console.error("Erreur lors de la récupération des tickers du S&P 500:", error);
       }
     }
   },
   mounted() {
+    console.log("User ID from localStorage:", this.userId); // Vérifiez si l'ID utilisateur est correctement récupéré
     this.fetchSp500Tickers();
   }
 };

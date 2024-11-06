@@ -9,46 +9,66 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      email: '',
-      password: '',
-    };
-  },
-  methods: {
-    async login() {
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+
+export default defineComponent({
+  name: 'LoginPage',
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const email = ref('');
+    const password = ref('');
+
+    const login = async () => {
       try {
+        console.log('Tentative de connexion avec email:', email.value);
+
         const response = await fetch('http://localhost:5000/api/users/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            email: this.email,
-            password: this.password,
+            email: email.value,
+            password: password.value,
           }),
         });
+
         const data = await response.json();
-        if (response.ok) {
-          alert('Connexion réussie');
-          // Rediriger vers la page de profil
-          this.$router.push('/profile');
-        } else {
-          alert(data.error);
-        }
+
+        if (!response.ok) throw new Error(data.error || 'Erreur de connexion');
+
+        // Stockez le token et l'ID utilisateur dans localStorage
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userId', data.user._id); // Assurez-vous que data.user._id existe
+
+        // Debugging : vérifiez si les données sont correctement stockées
+        console.log("Token sauvegardé:", data.token);
+        console.log("User ID sauvegardé:", data.user._id); // Modifié pour utiliser _id
+
+        store.dispatch('login', data.token);
+        router.push('/profile'); // Redirige après connexion réussie
       } catch (error) {
-        console.error('Erreur de connexion', error);
+        console.error('Erreur de connexion:', error);
       }
-    },
+    };
+
+    return {
+      email,
+      password,
+      login,
+    };
   },
-};
+});
 </script>
 
 <style scoped>
 .login-page {
   margin-top: 50px;
+  text-align: center;
 }
 
 h1 {

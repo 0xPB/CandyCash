@@ -18,21 +18,28 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      firstName: '',
-      lastName: '',
-      age: '',
-      gender: '',
-      email: '',
-      password: '',
-      postalAddress: '',
-    };
-  },
-  methods: {
-    async register() {
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+
+export default defineComponent({
+  name: 'RegisterPage',
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+
+    // Champs du formulaire d'inscription
+    const firstName = ref('');
+    const lastName = ref('');
+    const age = ref('');
+    const gender = ref('');
+    const email = ref('');
+    const password = ref('');
+    const postalAddress = ref('');
+
+    // Fonction d'inscription
+    const register = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/users/register', {
           method: 'POST',
@@ -40,30 +47,59 @@ export default {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            firstName: this.firstName,
-            lastName: this.lastName,
-            age: this.age,
-            gender: this.gender,
-            email: this.email,
-            password: this.password,
-            postalAddress: this.postalAddress,
+            firstName: firstName.value,
+            lastName: lastName.value,
+            age: age.value,
+            gender: gender.value,
+            email: email.value,
+            password: password.value,
+            postalAddress: postalAddress.value,
           }),
         });
         const data = await response.json();
         if (response.ok) {
           alert('Inscription réussie');
-          this.$router.push('/login');
+          // Enregistre le token reçu et connecte l'utilisateur automatiquement
+          store.dispatch('login', data.token);
+          router.push('/dashboard'); // Redirige vers le tableau de bord après l'inscription
         } else {
           alert(data.error);
         }
       } catch (error) {
-        console.error('Erreur d\'inscription:', error);
+        console.error("Erreur d'inscription:", error);
       }
-    },
+    };
+
+    return {
+      firstName,
+      lastName,
+      age,
+      gender,
+      email,
+      password,
+      postalAddress,
+      register,
+    };
   },
-};
+});
 </script>
 
 <style scoped>
-/* Garde le style que nous avons créé pour l'esthétique Candy Crush */
+.register-page {
+  margin-top: 50px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: #ff69b4;
+}
+
+input, select, button {
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 300px;
+}
 </style>

@@ -1,9 +1,13 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router';  // Assure-toi que le router est bien importé
+import router from './router';
+import { store } from './store'; // Importe bien le store
 
 // Importer le fichier CSS global
-import './assets/styles.css';  // Assure-toi que le chemin est correct
+import './assets/styles.css';
 
-createApp(App).use(router).mount('#app');
+createApp(App)
+  .use(router)
+  .use(store) // Ajoute le store Vuex
+  .mount('#app');
 
