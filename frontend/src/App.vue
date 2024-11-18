@@ -25,7 +25,7 @@ function handleLogout() {
         <RouterLink to="/statistics">Statistics</RouterLink> |
         <RouterLink to="/live-price">Live Price</RouterLink> |
         <RouterLink to="/indicators">Crypto Indicators</RouterLink> |
-        <RouterLink to="/precious-metals">Precious Metals</RouterLink> |
+        <RouterLink to="/chat">Chat</RouterLink> |
         <button @click="handleLogout">Logout</button>
       </template>
       <template v-else>
