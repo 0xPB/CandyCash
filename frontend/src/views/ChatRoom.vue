@@ -40,7 +40,16 @@ socket.on('connect', () => {
   socket.emit('set_username', authStore.username || 'Anonymous');
 });
 
-// Réception des messages du serveur
+// Récupération des anciens messages lors du changement de room
+socket.on('load_messages', (loadedMessages) => {
+  state.messages = loadedMessages.map((msg) => ({
+    user: msg.user,
+    message: msg.message,
+    time: msg.time,
+  }));
+});
+
+// Réception des nouveaux messages en temps réel
 socket.on('receive_message', (data) => {
   state.messages.push(data);
   console.log('Message received:', data);

@@ -1,6 +1,26 @@
 import { Server } from 'socket.io';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-const PORT = 4000; // Port séparé pour Socket.IO
+dotenv.config();
+
+const PORT = 4000; // Port pour Socket.IO
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/candycash';
+
+// Connexion à MongoDB
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
+// Schéma pour les messages
+const messageSchema = new mongoose.Schema({
+  room: String,
+  user: String,
+  message: String,
+  time: String,
+});
+
+const Message = mongoose.model('Message', messageSchema);
 
 const io = new Server(PORT, {
   cors: {
@@ -20,19 +40,34 @@ io.on('connection', (socket) => {
   });
 
   // Rejoindre un salon
-  socket.on('join_room', (room) => {
+  socket.on('join_room', async (room) => {
     socket.join(room);
     const username = users.get(socket.id) || 'Anonymous';
     console.log(`User ${username} joined room ${room}`);
+
+    // Récupérer les messages de la room depuis MongoDB
+    const messages = await Message.find({ room }).sort({ _id: 1 }); // Trie par ordre d'ajout
+    socket.emit('load_messages', messages); // Envoie les messages au client
+
+    // Notifie les autres utilisateurs
     io.to(room).emit('message', `${username} joined ${room}`);
   });
 
   // Gérer l'envoi d'un message
-  socket.on('send_message', ({ room, message }) => {
+  socket.on('send_message', async ({ room, message }) => {
     const username = users.get(socket.id) || 'Anonymous';
     const data = { user: username, message, time: new Date().toLocaleTimeString() };
-    console.log(`Message from ${username} in room ${room}: ${message}`);
-    io.to(room).emit('receive_message', data);
+
+    // Sauvegarde du message dans MongoDB
+    try {
+      const newMessage = new Message({ room, user: username, message, time: data.time });
+      await newMessage.save();
+      console.log(`Message saved in room ${room} by ${username}`);
+    } catch (err) {
+      console.error('Error saving message to MongoDB:', err);
+    }
+
+    io.to(room).emit('receive_message', data); // Envoie le message aux utilisateurs dans la room
   });
 
   // Déconnexion
