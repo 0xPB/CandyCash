@@ -80,3 +80,43 @@ export async function getInvestmentsWithPrices(req, res) {
   }
 }
 
+// Mettre à jour un investissement
+export async function updateInvestment(req, res) {
+  const { id } = req.params;
+  const { price, quantity, total } = req.body;
+
+  try {
+    const updatedInvestment = await Investment.findByIdAndUpdate(
+      id,
+      { price, quantity, total },
+      { new: true } // Retourne l'objet mis à jour
+    );
+
+    if (!updatedInvestment) {
+      return res.status(404).json({ message: 'Investment not found.' });
+    }
+
+    res.status(200).json(updatedInvestment);
+  } catch (err) {
+    console.error('Error updating investment:', err.message);
+    res.status(500).json({ message: 'Failed to update investment', error: err.message });
+  }
+}
+
+// Supprimer un investissement
+export async function deleteInvestment(req, res) {
+  const { id } = req.params;
+
+  try {
+    const deletedInvestment = await Investment.findByIdAndDelete(id);
+
+    if (!deletedInvestment) {
+      return res.status(404).json({ message: 'Investment not found.' });
+    }
+
+    res.status(200).json({ message: 'Investment deleted successfully.' });
+  } catch (err) {
+    console.error('Error deleting investment:', err.message);
+    res.status(500).json({ message: 'Failed to delete investment', error: err.message });
+  }
+}

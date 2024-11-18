@@ -5,11 +5,15 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import investmentRoutes from './routes/investmentRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import indicatorsRoutes from './routes/indicators.js';
+import globalMetricsRoutes from './routes/globalMetrics.js';
+import axios from 'axios';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const CMC_API_KEY = process.env.CMC_API_KEY;
 
 // Middleware
 app.use(cors());
@@ -23,6 +27,24 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/investments', investmentRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/indicators', indicatorsRoutes);
+app.use('/api/global-metrics', globalMetricsRoutes);  
+
+// Endpoint pour récupérer le Fear and Greed Index
+app.get('/api/indicators/fear-and-greed', async (req, res) => {
+  try {
+    const response = await axios.get('https://pro-api.coinmarketcap.com/v3/fear-and-greed/latest', {
+      headers: {
+        'X-CMC_PRO_API_KEY': CMC_API_KEY,
+      },
+    });
+    console.log('CoinMarketCap Response:', response.data); // Pour débogage
+    res.json(response.data);
+  } catch (err) {
+    console.error('Error fetching Fear and Greed Index:', err.message);
+    res.status(500).json({ message: 'Failed to fetch Fear and Greed Index' });
+  }
+});
 
 // MongoDB Connection
 mongoose

@@ -1,12 +1,15 @@
-<template>
-  <div>
-    <h1>Indicateurs du Marché</h1>
-    <FearAndGreedIndex />
-    <!-- Autres composants ou sections -->
-  </div>
-</template>
-
 <script setup>
-import FearAndGreedIndex from '@/components/FearAndGreedIndex.vue';
+import FearAndGreedIndicator from '@/components/FearAndGreedIndicator.vue';
+import GlobalMetrics from '@/components/GlobalMetrics.vue';
 </script>
 
+<template>
+  <div>
+    <h1>Crypto Indicators</h1>
+    <!-- Indicateur Fear and Greed -->
+    <FearAndGreedIndicator />
+
+    <!-- Indicateurs globaux -->
+    <GlobalMetrics />
+  </div>
+</template>

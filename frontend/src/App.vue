@@ -21,9 +21,11 @@ function handleLogout() {
       <!-- Affichage dynamique en fonction de l'état de connexion -->
       <template v-if="authStore.isLoggedIn">
         <RouterLink to="/investment">Investment</RouterLink> |
+        <RouterLink to="/edit-invest">Edit Investments</RouterLink> |
         <RouterLink to="/statistics">Statistics</RouterLink> |
         <RouterLink to="/live-price">Live Price</RouterLink> |
-        <RouterLink to="/crypto-indicators">Crypto Indicators</RouterLink> |
+        <RouterLink to="/indicators">Crypto Indicators</RouterLink> |
+        <RouterLink to="/precious-metals">Precious Metals</RouterLink> |
         <button @click="handleLogout">Logout</button>
       </template>
       <template v-else>

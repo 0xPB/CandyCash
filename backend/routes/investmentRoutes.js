@@ -1,6 +1,6 @@
 import express from 'express';
-import { getCurrentStockPrice, getInvestmentsWithPrices } from '../controllers/investmentController.js';
-import { addInvestment, getInvestments } from '../controllers/investmentController.js';
+import { getCurrentStockPrice } from '../controllers/investmentController.js';
+import { addInvestment, getInvestments, updateInvestment, deleteInvestment } from '../controllers/investmentController.js';
 
 const router = express.Router();
 
@@ -10,6 +10,7 @@ router.get('/:userId', getInvestments); // Récupérer les investissements d'un 
 // Récupérer le cours d'un actif spécifique
 router.get('/price/:symbol', getCurrentStockPrice);
 
-router.get('/prices/:userId', getInvestmentsWithPrices); // Récupérer les investissements avec prix actuels
+router.put('/:id', updateInvestment); // Mettre à jour un investissement
+router.delete('/:id', deleteInvestment); // Supprimer un investissement
 
 export default router;
