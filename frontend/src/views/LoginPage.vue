@@ -15,7 +15,7 @@ const router = useRouter();
 async function handleLogin() {
   try {
     const response = await loginUser(form);
-    authStore.login(response.data.userId); // Met à jour l'état de connexion
+    authStore.login(response.data.userId, response.data.username); // Met à jour l'état de connexion avec le username
     alert('Login successful!');
     router.push('/investment'); // Redirige vers la page Investment
   } catch (err) {

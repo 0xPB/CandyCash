@@ -1,60 +1,82 @@
 <script setup>
+import { ref, reactive, onMounted } from 'vue';
 import { io } from 'socket.io-client';
+import { useAuthStore } from '@/stores/authStore';
 
-// Connecte le client à Socket.IO sur le port 6000
-const socket = io('http://localhost:4000');
+const authStore = useAuthStore();
 
-// Écoute les messages du serveur
-socket.on('message', (data) => {
-  console.log('Message from server:', data);
+// Connexion au serveur Socket.IO
+const socket = io('http://localhost:4000'); // Remplacez par l'URL appropriée
+
+// État réactif pour les messages et la sélection de salons
+const state = reactive({
+  currentRoom: 'general',
+  message: '',
+  messages: [],
+  rooms: ['general', 'crypto', 'stocks', 'precious-metals'], // Liste des salons
 });
 
-// Rejoindre un salon
-function joinRoom(room) {
-  socket.emit('join_room', room);
-  console.log(`Joined room: ${room}`);
+// Fonction pour rejoindre un salon
+function joinRoom() {
+  socket.emit('join_room', state.currentRoom);
+  state.messages = []; // Réinitialise les messages pour le nouveau salon
 }
 
-// Envoyer un message
-function sendMessage(room, message) {
-  socket.emit('send_message', { room, message, user: 'User1' });
+// Fonction pour envoyer un message
+function sendMessage() {
+  if (state.message.trim() !== '') {
+    socket.emit('send_message', {
+      room: state.currentRoom,
+      message: state.message,
+    });
+    state.message = ''; // Vide le champ de saisie
+  }
 }
+
+// Listener Socket.IO
+socket.on('connect', () => {
+  console.log('Connected to socket server:', socket.id);
+  // Envoie le username au serveur
+  socket.emit('set_username', authStore.username || 'Anonymous');
+});
+
+// Réception des messages du serveur
+socket.on('receive_message', (data) => {
+  state.messages.push(data);
+  console.log('Message received:', data);
+});
+
+// Rejoindre un salon lors du montage initial
+onMounted(() => {
+  joinRoom(); // Rejoint le salon par défaut
+});
 </script>
-
 
 <template>
   <div>
-    <h1>Chat Room: {{ currentRoom }}</h1>
+    <h1>Chat Room</h1>
+    <label for="rooms">Select a Room:</label>
+    <select v-model="state.currentRoom" @change="joinRoom" id="rooms">
+      <option v-for="room in state.rooms" :key="room" :value="room">
+        {{ room }}
+      </option>
+    </select>
 
-    <!-- Sélection du salon -->
-    <div>
-      <label for="username">Username:</label>
-      <input id="username" v-model="username" type="text" placeholder="Enter your username" />
-
-      <label for="room">Select Room:</label>
-      <select id="room" v-model="currentRoom" @change="joinRoom(currentRoom)">
-        <option value="General">General</option>
-        <option value="Stocks">Stocks</option>
-        <option value="Precious Metals">Precious Metals</option>
-      </select>
+    <div class="chat-window" style="border: 1px solid #ccc; padding: 10px; margin-top: 10px; height: 300px; overflow-y: scroll;">
+      <div v-for="(msg, index) in state.messages" :key="index">
+        <strong>{{ msg.user }}:</strong> {{ msg.message }} <span style="font-size: 0.8em;">({{ msg.time }})</span>
+      </div>
     </div>
 
-    <!-- Liste des messages -->
-    <div style="border: 1px solid #ddd; padding: 10px; height: 300px; overflow-y: auto;">
-      <p v-for="(msg, index) in messages" :key="index">
-        <strong>{{ msg.user }}:</strong> {{ msg.message }} <em>({{ msg.time }})</em>
-      </p>
-    </div>
-
-    <!-- Envoi de message -->
-    <div>
+    <div class="chat-input" style="margin-top: 10px;">
       <input
-        v-model="message"
         type="text"
+        v-model="state.message"
         placeholder="Type your message..."
         @keyup.enter="sendMessage"
+        style="width: 80%;"
       />
-      <button @click="sendMessage">Send</button>
+      <button @click="sendMessage" style="width: 18%;">Send</button>
     </div>
   </div>
 </template>

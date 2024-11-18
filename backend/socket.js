@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 
-const PORT = 4000; // Définissez un port séparé pour Socket.IO
+const PORT = 4000; // Port séparé pour Socket.IO
 
 const io = new Server(PORT, {
   cors: {
@@ -8,25 +8,38 @@ const io = new Server(PORT, {
   },
 });
 
+const users = new Map(); // Map pour stocker les associations socketId <-> username
+
 io.on('connection', (socket) => {
   console.log(`User connected: ${socket.id}`);
+
+  // Lorsque l'utilisateur fournit son username après la connexion
+  socket.on('set_username', (username) => {
+    users.set(socket.id, username); // Associe le username à l'ID du socket
+    console.log(`Username set for ${socket.id}: ${username}`);
+  });
 
   // Rejoindre un salon
   socket.on('join_room', (room) => {
     socket.join(room);
-    console.log(`User ${socket.id} joined room ${room}`);
-    io.to(room).emit('message', `User ${socket.id} joined ${room}`);
+    const username = users.get(socket.id) || 'Anonymous';
+    console.log(`User ${username} joined room ${room}`);
+    io.to(room).emit('message', `${username} joined ${room}`);
   });
 
   // Gérer l'envoi d'un message
-  socket.on('send_message', ({ room, message, user }) => {
-    const data = { user, message, time: new Date().toLocaleTimeString() };
+  socket.on('send_message', ({ room, message }) => {
+    const username = users.get(socket.id) || 'Anonymous';
+    const data = { user: username, message, time: new Date().toLocaleTimeString() };
+    console.log(`Message from ${username} in room ${room}: ${message}`);
     io.to(room).emit('receive_message', data);
   });
 
   // Déconnexion
   socket.on('disconnect', () => {
-    console.log(`User disconnected: ${socket.id}`);
+    const username = users.get(socket.id) || 'Anonymous';
+    console.log(`User disconnected: ${username}`);
+    users.delete(socket.id); // Supprime l'association socketId <-> username
   });
 });
 

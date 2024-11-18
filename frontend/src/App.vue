@@ -20,6 +20,7 @@ function handleLogout() {
     <nav>
       <!-- Affichage dynamique en fonction de l'état de connexion -->
       <template v-if="authStore.isLoggedIn">
+        <p>Welcome, <strong>{{ authStore.username }}</strong>!</p> <!-- Affiche le username -->
         <RouterLink to="/investment">Investment</RouterLink> |
         <RouterLink to="/edit-invest">Edit Investments</RouterLink> |
         <RouterLink to="/statistics">Statistics</RouterLink> |
