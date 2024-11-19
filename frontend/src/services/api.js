@@ -34,3 +34,8 @@ export const updateInvestment = (id, data) => API.put(`/investments/${id}`, data
 // Supprimer un investissement
 export const deleteInvestment = (id) => API.delete(`/investments/${id}`);
 
+// Sauvegarde le total des profits/pertes
+export const saveProfitLoss = (data) => API.post('/profit-loss', data);
+
+// Récupère les profits/pertes
+export const getProfitLoss = (userId) => API.get(`/profit-loss/${userId}`);
