@@ -2,6 +2,7 @@
 import { ref, reactive, onMounted } from 'vue';
 import { io } from 'socket.io-client';
 import { useAuthStore } from '@/stores/authStore';
+import sound from '../assets/sound/Chat.mp3'; // Importer le fichier audio
 
 const authStore = useAuthStore();
 
@@ -24,6 +25,7 @@ function joinRoom() {
 
 // Fonction pour envoyer un message
 function sendMessage() {
+
   if (state.message.trim() !== '') {
     socket.emit('send_message', {
       room: state.currentRoom,
@@ -53,6 +55,11 @@ socket.on('load_messages', (loadedMessages) => {
 socket.on('receive_message', (data) => {
   state.messages.push(data);
   console.log('Message received:', data);
+ // Créer une instance Audio et jouer le son
+ const audio = new Audio(sound);
+  audio.play().catch(error => {
+    console.error("Audio playback failed:", error);
+  });
 });
 
 // Rejoindre un salon lors du montage initial

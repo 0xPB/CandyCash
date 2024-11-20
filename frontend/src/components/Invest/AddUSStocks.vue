@@ -3,6 +3,7 @@ import { reactive } from 'vue';
 import { addInvestment } from '@/services/api';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
+import sound from '../../assets/sound/AddInvestPage.mp3'; // Importer le fichier audio
 
 // Liste des entreprises technologiques
 const techCompanies = [
@@ -30,6 +31,11 @@ const authStore = useAuthStore();
 
 // Gère l'ajout d'un investissement
 async function handleAddInvestment() {
+ // Créer une instance Audio et jouer le son
+ const audio = new Audio(sound);
+  audio.play().catch(error => {
+    console.error("Audio playback failed:", error);
+  });
   if (!authStore.isLoggedIn) {
     alert('You must be logged in to add an investment!');
     router.push('/login');
@@ -68,7 +74,7 @@ async function handleAddInvestment() {
       </select>
 
       <label for="price">Price:</label>
-      <input v-model.number="investment.price" type="number" id="price" required />
+      <input v-model.number="investment.price" type="number" id="price" step="0.01" required />
 
       <label for="quantity">Quantity:</label>
       <input v-model.number="investment.quantity" type="number" id="quantity" min="1" required />

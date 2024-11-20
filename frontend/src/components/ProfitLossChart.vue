@@ -84,6 +84,6 @@ onMounted(() => {
 <template>
   <div>
     <h1>Profit/Loss Line Chart</h1>
-    <canvas id="profitLossChart" width="800" height="400"></canvas>
+    <canvas id="profitLossChart" width="600" height="400"></canvas>
   </div>
 </template>

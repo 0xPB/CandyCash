@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
 import { getInvestments, getCurrentStockPrice, saveProfitLoss } from '@/services/api';
+import axios from 'axios';
 import { useAuthStore } from '@/stores/authStore';
 
 const authStore = useAuthStore();
@@ -11,12 +12,6 @@ const state = reactive({
   totalProfitLoss: 0, // Stocke le total des profits/pertes
   isCalculating: false, // État pour afficher le processus de calcul
 });
-
-// Métaux précieux avec prix par défaut (peut être remplacé par un appel API)
-const preciousMetalsPrices = {
-  Gold: 2000, // Exemple de prix actuel en dollars
-  Silver: 25, // Exemple de prix actuel en dollars
-};
 
 // Fonction pour récupérer les investissements
 async function fetchInvestments() {
@@ -30,6 +25,24 @@ async function fetchInvestments() {
   } catch (err) {
     console.error('Error fetching investments:', err.response?.data || err.message);
     alert('Failed to fetch investments.');
+  }
+}
+
+// Fonction pour récupérer le prix des métaux précieux
+async function fetchMetalPrice(metal) {
+  const metalSymbols = {
+    Gold: 'XAU',
+    Silver: 'XAG',
+  };
+
+  const apiUrl = `https://api.gold-api.com/price/${metalSymbols[metal]}`;
+  try {
+    const { data } = await axios.get(apiUrl);
+    console.log(`Price fetched for ${metal}: $${data.price}`);
+    return Number(data.price.toFixed(2)); // Retourne le prix avec deux décimales
+  } catch (err) {
+    console.error(`Error fetching price for ${metal}:`, err.message);
+    return 0; // Retourne 0 en cas d'erreur
   }
 }
 
@@ -76,9 +89,9 @@ async function fetchCurrentPrices() {
         console.error(`Error fetching price for ${investment.name}:`, err.message);
         investment.currentPrice = 0; // Assure une valeur par défaut
       }
-    } else if (preciousMetalsPrices[investment.name]) {
-      // Récupère le prix des métaux précieux
-      investment.currentPrice = preciousMetalsPrices[investment.name];
+    } else if (investment.name === 'Gold' || investment.name === 'Silver') {
+      // Récupère les prix des métaux précieux
+      investment.currentPrice = await fetchMetalPrice(investment.name);
       console.log(`Price for ${investment.name}: $${investment.currentPrice}`);
     } else {
       investment.currentPrice = 0; // Actifs non supportés

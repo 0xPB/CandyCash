@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue';
 import { addInvestment } from '@/services/api';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
+import sound from '../../assets/sound/AddInvestPage.mp3'; // Importer le fichier audio
 import axios from 'axios';
 
 // Liste des métaux précieux
@@ -28,7 +29,7 @@ async function fetchPrice() {
   try {
     priceError.value = null; // Réinitialise l'erreur
     const { data } = await axios.get(`https://api.gold-api.com/price/${investment.symbol}`);
-    investment.price = Number(data.price.toFixed(0)); // Formatte le prix en entier sans virgule
+    investment.price = Number(data.price.toFixed(2)); // Formatte le prix en entier sans virgule
   } catch (err) {
     console.error('Error fetching price:', err.message);
     priceError.value = 'Failed to fetch price. Please try again later.';
@@ -44,6 +45,12 @@ function handleMetalChange() {
 
 // Gère l'ajout d'un investissement
 async function handleAddInvestment() {
+ // Créer une instance Audio et jouer le son
+ const audio = new Audio(sound);
+  audio.play().catch(error => {
+    console.error("Audio playback failed:", error);
+  });
+
   if (!authStore.isLoggedIn) {
     alert('You must be logged in to add an investment!');
     router.push('/login');

@@ -3,21 +3,29 @@ import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 import { loginUser } from '@/services/api';
+import sound from '../assets/sound/AppPage.mp3'; // Importer le fichier audio
 
 const form = reactive({
   username: '',
   password: '',
 });
 
-const authStore = useAuthStore(); // Store pour gérer la connexion
+const authStore = useAuthStore();
 const router = useRouter();
 
 async function handleLogin() {
+  // Créer une instance Audio et jouer le son
+  const audio = new Audio(sound);
+  audio.play().catch(error => {
+    console.error("Audio playback failed:", error);
+  });
+
   try {
+    // Effectuer la logique de connexion
     const response = await loginUser(form);
-    authStore.login(response.data.userId, response.data.username); // Met à jour l'état de connexion avec le username
+    authStore.login(response.data.userId, response.data.username);
     alert('Login successful!');
-    router.push('/investment'); // Redirige vers la page Investment
+    router.push('/investment'); // Redirection après connexion
   } catch (err) {
     console.error(err);
     alert('Failed to login.');
