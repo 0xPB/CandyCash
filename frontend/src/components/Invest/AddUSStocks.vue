@@ -1,6 +1,6 @@
 <script setup>
 import { reactive } from 'vue';
-import { addInvestment } from '@/services/api';
+import { addInvestment } from '@/services/api'; // Assure-toi que cette fonction est correctement importée
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 import sound from '../../assets/sound/AddInvestPage.mp3'; // Importer le fichier audio
@@ -31,11 +31,12 @@ const authStore = useAuthStore();
 
 // Gère l'ajout d'un investissement
 async function handleAddInvestment() {
- // Créer une instance Audio et jouer le son
- const audio = new Audio(sound);
+  // Créer une instance Audio et jouer le son
+  const audio = new Audio(sound);
   audio.play().catch(error => {
     console.error("Audio playback failed:", error);
   });
+
   if (!authStore.isLoggedIn) {
     alert('You must be logged in to add an investment!');
     router.push('/login');
@@ -45,7 +46,7 @@ async function handleAddInvestment() {
   const total = investment.price * investment.quantity; // Calcul du total
 
   try {
-    // Envoie les données au backend
+    // Envoie les données au backend en utilisant la fonction addInvestment
     await addInvestment({
       userId: authStore.userId,
       name: investment.name,

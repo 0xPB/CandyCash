@@ -7,7 +7,7 @@ import sound from '../assets/sound/Chat.mp3'; // Importer le fichier audio
 const authStore = useAuthStore();
 
 // Connexion au serveur Socket.IO
-const socket = io('http://localhost:4000'); // Remplacez par l'URL appropriée
+const socket = io('http://A.B.C.D:4000'); // Remplacez par l'URL appropriée
 
 // État réactif pour les messages et la sélection de salons
 const state = reactive({

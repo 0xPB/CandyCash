@@ -10,6 +10,8 @@ const router = useRouter();
 // Vérifie l'état de connexion au chargement
 authStore.checkLogin();
 
+
+
 function handleLogout() {
  // Créer une instance Audio et jouer le son
  const audio = new Audio(sound);

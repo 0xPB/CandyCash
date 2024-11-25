@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const PORT = 4000; // Port pour Socket.IO
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/candycash';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://A.B.C.D:27017/candycash';
 
 // Connexion à MongoDB
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })

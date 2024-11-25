@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Chart, registerables } from 'chart.js';
-import { getProfitLoss } from '@/services/api';
+import { getProfitLoss } from '@/services/api'; // Import de la fonction d'API
 import { useAuthStore } from '@/stores/authStore'; // Import du store pour obtenir userId
 
 Chart.register(...registerables);
@@ -11,10 +11,11 @@ const chart = ref(null); // Référence au graphique
 
 const authStore = useAuthStore(); // Initialisation du store
 
+// Fonction pour récupérer les données de profits et pertes
 async function fetchProfitLoss() {
   try {
     const userId = authStore.userId; // Récupère l'ID utilisateur depuis le store
-    const { data } = await getProfitLoss(userId);
+    const { data } = await getProfitLoss(userId); // Appelle la fonction getProfitLoss de l'API
     profitLossData.value = data;
     updateChart(); // Met à jour le graphique après avoir récupéré les données
   } catch (err) {
@@ -23,6 +24,7 @@ async function fetchProfitLoss() {
   }
 }
 
+// Fonction pour mettre à jour le graphique
 function updateChart() {
   if (chart.value) {
     chart.value.destroy(); // Détruit l'ancien graphique avant d'en créer un nouveau
@@ -76,6 +78,7 @@ function updateChart() {
   });
 }
 
+// Charge les données et initialise le graphique au montage
 onMounted(() => {
   fetchProfitLoss(); // Récupère les données et initialise le graphique
 });

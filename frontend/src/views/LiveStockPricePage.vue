@@ -1,6 +1,6 @@
 <script setup>
-import { ref, watch } from 'vue';
-import axios from 'axios';
+import { ref, watch, onMounted } from 'vue';
+import { getCurrentStockPrice } from '@/services/api'; // Import de la fonction d'API
 
 const stockSymbols = [
   { label: 'Apple', value: 'AAPL' },
@@ -19,10 +19,10 @@ const selectedSymbol = ref(stockSymbols[0].value); // Par défaut, sélectionne 
 const livePrice = ref(null); // Stocke le prix live
 const errorMessage = ref('');
 
-// Fonction pour récupérer le prix live
+// Fonction pour récupérer le prix live via la méthode API
 async function fetchLivePrice() {
   try {
-    const response = await axios.get(`http://localhost:5000/api/investments/price/${selectedSymbol.value}`);
+    const response = await getCurrentStockPrice(selectedSymbol.value); // Utilisation de la fonction getCurrentStockPrice de api.js
     livePrice.value = response.data.previousClose; // Remplacez `previousClose` par la propriété retournée par l'API
     errorMessage.value = '';
   } catch (err) {
@@ -36,7 +36,9 @@ async function fetchLivePrice() {
 watch(selectedSymbol, fetchLivePrice);
 
 // Charger le prix initial lors du montage
-fetchLivePrice();
+onMounted(() => {
+  fetchLivePrice();
+});
 </script>
 
 <template>

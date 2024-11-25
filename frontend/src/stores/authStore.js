@@ -3,37 +3,37 @@ import { defineStore } from 'pinia';
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     isLoggedIn: false, // Indique si l'utilisateur est connecté
-    userId: null, // Stocke l'ID de l'utilisateur
-    username: null, // Stocke le nom d'utilisateur
+    userId: null,      // ID de l'utilisateur
+    username: null,    // Nom d'utilisateur
   }),
 
   actions: {
-    // Action pour se connecter
+    // Action de connexion
     login(userId, username) {
       this.isLoggedIn = true;
       this.userId = userId;
-      this.username = username; // Enregistre le nom d'utilisateur
-      localStorage.setItem('userId', userId); // Stocke l'ID dans le localStorage
-      localStorage.setItem('username', username); // Stocke le nom d'utilisateur dans le localStorage
+      this.username = username;
+      localStorage.setItem('userId', userId);
+      localStorage.setItem('username', username);
     },
 
-    // Action pour se déconnecter
+    // Action de déconnexion
     logout() {
       this.isLoggedIn = false;
       this.userId = null;
       this.username = null;
-      localStorage.removeItem('userId'); // Supprime l'ID du localStorage
-      localStorage.removeItem('username'); // Supprime le nom d'utilisateur du localStorage
+      localStorage.removeItem('userId');
+      localStorage.removeItem('username');
     },
 
-    // Vérifie si l'utilisateur est connecté
+    // Vérifier l'état de connexion
     checkLogin() {
       const userId = localStorage.getItem('userId');
-      const username = localStorage.getItem('username'); // Récupère le nom d'utilisateur
+      const username = localStorage.getItem('username');
       if (userId && username) {
         this.isLoggedIn = true;
         this.userId = userId;
-        this.username = username; // Récupère le nom d'utilisateur du localStorage
+        this.username = username;
       }
     },
   },

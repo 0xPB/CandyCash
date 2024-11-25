@@ -34,3 +34,48 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
 ## 📜 License
 
 This project is licensed under the GPLv3 License. See the `LICENSE` file for more information.
+
+## Todo
+
+installer mongod
+
+2. Vérifier l'adresse d'écoute de MongoDB
+MongoDB peut être configuré pour écouter uniquement sur 127.0.0.1 (localhost), ce qui empêche les connexions externes. Vérifiez le fichier de configuration mongod.conf :
+bash
+Copy code
+sudo nano /etc/mongod.conf
+Recherchez la section bindIp. Si elle est définie sur 127.0.0.1, remplacez-la par 0.0.0.0 pour permettre les connexions externes :
+yaml
+Copy code
+net:
+  bindIp: 0.0.0.0
+  port: 27017
+Redémarrez MongoDB après cette modification :
+bash
+Copy code
+sudo systemctl restart mongod
+
+Ouvrir ces ports:
+3000 frontend
+, 4000: chat
+5000: backend
+27017: mongodb
+
+. Activer le routage temporairement
+Cette méthode active le routage des paquets uniquement jusqu'au prochain redémarrage.
+
+Utilisez la commande suivante pour activer le routage des paquets :
+
+bash
+Copy code
+sudo sysctl -w net.ipv4.ip_forward=1
+Vérifiez que le routage est activé :
+
+bash
+Copy code
+cat /proc/sys/net/ipv4/ip_forward
+Si la sortie est 1, le routage est activé.
+
+
+sudo apt install ufw
+sudo ufw enable
