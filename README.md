@@ -1,81 +1,82 @@
-
 # CandyCash 🍬📈
+
 CandyCash is a playful financial dashboard that allows users to track stock performance and market trends in real time. Inspired by the candy universe, CandyCash makes financial analysis sweet and enjoyable! 🍭
 
 ## Features
 
-- 🔒 **Secure User Login**
-- 📊 **Real-time Stock Tracking** with external financial data API
-- 🍬 **Dynamic Data Visualization** with interactive charts
-- ⭐ **Favorites Management** to monitor specific stocks with personalized views
-- 🚨 **Real-time Notifications** for market changes
-- 🍭 **Intuitive Interface** with a candy-themed design
+- Secure User Login: Protect your data with robust authentication.
+- Real-time Stock Tracking: Access live financial data through an external API.
+- Dynamic Data Visualization: Enjoy interactive charts for intuitive analysis.
+- Favorites Management: Monitor specific stocks with personalized views.
+- Real-time Notifications: Stay updated on significant market changes.
+- Intuitive Interface: Navigate with ease through a candy-themed design.
+- System Management via Dialog: Control and manage application services directly through the integrated Python script:
+  - Open All Ports: Enable the required ports (3000, 4000, 5000, 27017) for frontend, backend, chat, and database services.
+  - Close All Ports: Securely close all ports when services are stopped.
+  - Start/Stop Frontend: Manage the frontend service.
+  - Start/Stop Backend: Manage the backend service.
+  - Start/Stop Chat: Enable or disable the chat service.
+  - Modify IP: Replace the current system IP address.
+  - Reset IP to Default: Restore the default IP address for the system.
 
 ## Technologies Used
 
 ### Frontend
-- **Vue.js**: JavaScript framework for building the user interface
-- **Vue Router**: Handles navigation between different pages
-- **Vuex**: Manages the global state of the application
-- **Chart.js**: Displays financial data as dynamic charts
+- Vue.js: JavaScript framework for building the user interface.
+- Vue Router: Handles navigation between different pages.
+- Vuex: Manages the global state of the application.
+- Chart.js: Visualizes financial data with dynamic, interactive charts.
 
 ### Backend
-- **Node.js**: Development environment for the server
-- **Express.js**: Web framework for building the API
-- **Database**: SQL/NoSQL to store user data and preferences
-- **Socket.io**: Real-time communication for instant notifications
+- Node.js: Development environment for the server.
+- Express.js: Web framework for building the API.
+- MongoDB: Database to store user data and preferences.
+- Socket.io: Enables real-time communication for instant notifications.
 
-## 🖋️ Authors
+## Installation
 
-- Paul Bruno [LinkedIn](https://www.linkedin.com/in/paulbruno33)
-- Hugo Andrejewski [LinkedIn](https://www.linkedin.com/in/hugo-andrejewski-a0385b253)
-- Mathias Chauvet [LinkedIn](https://www.linkedin.com/in/mathias-chauvet-022447204)
+1. Install MongoDB:
+   sudo apt update
+   sudo apt install -y mongodb
 
-## 📜 License
+2. Configure MongoDB:
+   Open the configuration file:
+   sudo nano /etc/mongod.conf
 
-This project is licensed under the GPLv3 License. See the `LICENSE` file for more information.
+   Modify the bindIp to allow external connections:
+   net:
+     bindIp: 0.0.0.0
+     port: 27017
 
-## Todo
+   Restart MongoDB:
+   sudo systemctl restart mongod
 
-installer mongod
+3. Install MongoDB Compass (optional for GUI):
+   sudo apt install mongodb-compass
 
-2. Vérifier l'adresse d'écoute de MongoDB
-MongoDB peut être configuré pour écouter uniquement sur 127.0.0.1 (localhost), ce qui empêche les connexions externes. Vérifiez le fichier de configuration mongod.conf :
-bash
-Copy code
-sudo nano /etc/mongod.conf
-Recherchez la section bindIp. Si elle est définie sur 127.0.0.1, remplacez-la par 0.0.0.0 pour permettre les connexions externes :
-yaml
-Copy code
-net:
-  bindIp: 0.0.0.0
-  port: 27017
-Redémarrez MongoDB après cette modification :
-bash
-Copy code
-sudo systemctl restart mongod
+4. Run the Application:
+   Launch the Python script to manage the system:
+   sudo python3 CandyCash.py
 
-Ouvrir ces ports:
-3000 frontend
-, 4000: chat
-5000: backend
-27017: mongodb
+5. System Management:
+   Use the dialog interface to:
+   - Open or close the necessary ports.
+   - Start or stop the frontend, backend, and chat services.
+   - Modify or reset the system IP address.
 
-. Activer le routage temporairement
-Cette méthode active le routage des paquets uniquement jusqu'au prochain redémarrage.
+## Ports Used
 
-Utilisez la commande suivante pour activer le routage des paquets :
+- 3000: Frontend
+- 4000: Chat
+- 5000: Backend
+- 27017: MongoDB
 
-bash
-Copy code
-sudo sysctl -w net.ipv4.ip_forward=1
-Vérifiez que le routage est activé :
+## Authors
 
-bash
-Copy code
-cat /proc/sys/net/ipv4/ip_forward
-Si la sortie est 1, le routage est activé.
+- Paul Bruno: LinkedIn at https://www.linkedin.com/in/paulbruno33
+- Hugo Andrejewski: LinkedIn at https://www.linkedin.com/in/hugo-andrejewski-a0385b253
+- Mathias Chauvet: LinkedIn at https://www.linkedin.com/in/mathias-chauvet-022447204
 
+## License
 
-sudo apt install ufw
-sudo ufw enable
+This project is licensed under the GPLv3 License. See the LICENSE file for more information.
