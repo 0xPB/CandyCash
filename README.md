@@ -2,16 +2,16 @@
 
 CandyCash is a playful financial dashboard that allows users to track stock performance and market trends in real time. Inspired by the candy universe, CandyCash makes financial analysis sweet and enjoyable! 🍭
 
-## Features 🍡
+## Features 🍡✨
 
 - 🔒 **Secure User Login**: Protect your data with robust authentication.
 - 📊 **Real-time Stock Tracking**: Access live financial data through an external API.
-- 🍬 **Dynamic Data Visualization**: Enjoy interactive charts for intuitive analysis.
+- 🍩 **Dynamic Data Visualization**: Enjoy interactive charts for intuitive analysis.
 - ⭐ **Favorites Management**: Monitor specific stocks with personalized views.
 - 🚨 **Real-time Notifications**: Stay updated on significant market changes.
 - 🍭 **Intuitive Interface**: Navigate with ease through a candy-themed design.
 
-## Technologies Used 🍫
+## Technologies Used 🍫🍬
 
 ### Frontend 🍩
 - **Vue.js**: JavaScript framework for building the user interface.
@@ -25,13 +25,13 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
 - **MongoDB**: Database to store user data and preferences.
 - **Socket.io**: Enables real-time communication for instant notifications.
 
-## Installation 🍬
+## Installation 🍭✨
 
-1. 🍭 **Install MongoDB**:
+1. 🍬 **Install MongoDB**:  
    `sudo apt update`  
    `sudo apt install -y mongodb`
 
-2. 🍭 **Configure MongoDB**:  
+2. 🍫 **Configure MongoDB**:  
    Open the configuration file:  
    `sudo nano /etc/mongod.conf`  
 
@@ -43,19 +43,19 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
    Restart MongoDB:  
    `sudo systemctl restart mongod`
 
-3. 🍭 **Install MongoDB Compass** (optional for GUI):  
+3. 🍩 **Install MongoDB Compass** (optional for GUI):  
    `sudo apt install mongodb-compass`
 
 4. 🍭 **Install UFW (Uncomplicated Firewall)**:  
-   `sudo apt install ufw`  
+   `sudo apt install ufw`
 
    Enable UFW:  
    `sudo ufw enable`
 
-5. 🍭 **Install npm (Node.js Package Manager)**:  
+5. 🍬 **Install npm (Node.js Package Manager)**:  
    `sudo apt install -y npm`
 
-6. 🍭 **Install Node.js Dependencies**:  
+6. 🍪 **Install Node.js Dependencies**:  
    Navigate to the backend folder and install dependencies:  
    `cd backend`  
    `npm install`  
@@ -64,24 +64,24 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
    `cd ../frontend`  
    `npm install`
 
-7. 🍭 **Run the Application**:  
+7. 🍡 **Run the Application**:  
    Return to the root folder and launch the Python script to manage the system:  
    `cd ..`  
    `sudo python3 CandyCash.py`
 
-## About `CandyCash.py` 🍬
+## About `CandyCash.py` 🍭✨
 
 The `CandyCash.py` script, located at the root of the project, is the central management tool for controlling the application services and configuring the system. Here's what it does:
 
-- 🍡 **Open All Ports**: Automatically opens the required ports (3000 for the frontend, 4000 for the chat, 5000 for the backend, and 27017 for MongoDB) to ensure all services function correctly.
-- 🍡 **Close All Ports**: Closes all the aforementioned ports for security when the services are no longer needed.
-- 🍡 **Start/Stop Frontend**: Allows the user to start or stop the Vue.js frontend interface.
-- 🍡 **Start/Stop Backend**: Enables the user to start or stop the Node.js backend server.
-- 🍡 **Start/Stop Chat**: Manages the chat service by enabling or disabling the Socket.io-based server.
-- 🍡 **Modify IP**: Changes the server's IP address if needed, useful for deploying the system in different environments or with different network configurations.
-- 🍡 **Reset IP to Default**: Restores the IP address to its default state.
+- 🍬 **Open All Ports**: Automatically opens the required ports (3000 for the frontend, 4000 for the chat, 5000 for the backend, and 27017 for MongoDB) to ensure all services function correctly.
+- 🍩 **Close All Ports**: Closes all the aforementioned ports for security when the services are no longer needed.
+- 🍫 **Start/Stop Frontend**: Allows the user to start or stop the Vue.js frontend interface.
+- 🍪 **Start/Stop Backend**: Enables the user to start or stop the Node.js backend server.
+- ⭐ **Start/Stop Chat**: Manages the chat service by enabling or disabling the Socket.io-based server.
+- 🍡 **Modify IP**: Changes the server's IP address. **Important**: After clicking the "Modify IP" button, you must click the "Reset IP" button before exiting the Python script to ensure the IP address is restored correctly.
+- ✨ **Reset IP to Default**: Restores the IP address to its default state.
 
-## Ports Used 🍬
+## Ports Used 🍩🍫
 
 - 3000: Frontend
 - 4000: Chat

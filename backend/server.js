@@ -32,9 +32,6 @@ app.use('/api/indicators', indicatorsRoutes);
 app.use('/api/global-metrics', globalMetricsRoutes);
 app.use('/api/profit-loss', profitLossRoutes); 
 
-
-
-
 // Endpoint pour récupérer le Fear and Greed Index
 app.get('/api/indicators/fear-and-greed', async (req, res) => {
   try {
