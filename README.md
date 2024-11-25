@@ -10,13 +10,13 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
 - Favorites Management: Monitor specific stocks with personalized views.
 - Real-time Notifications: Stay updated on significant market changes.
 - Intuitive Interface: Navigate with ease through a candy-themed design.
-- System Management via Dialog: Control and manage application services directly through the integrated Python script:
+- System Management via Dialog: Control and manage application services directly through the Python script `CandyCash.py`:
   - Open All Ports: Enable the required ports (3000, 4000, 5000, 27017) for frontend, backend, chat, and database services.
   - Close All Ports: Securely close all ports when services are stopped.
   - Start/Stop Frontend: Manage the frontend service.
   - Start/Stop Backend: Manage the backend service.
   - Start/Stop Chat: Enable or disable the chat service.
-  - Modify IP: Replace the current system IP address.
+  - Modify IP: Replace the current system IP address for the server.
   - Reset IP to Default: Restore the default IP address for the system.
 
 ## Technologies Used
@@ -54,15 +54,37 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
 3. Install MongoDB Compass (optional for GUI):
    sudo apt install mongodb-compass
 
-4. Run the Application:
-   Launch the Python script to manage the system:
+4. Install UFW (Uncomplicated Firewall):
+   sudo apt install ufw
+
+   Enable UFW:
+   sudo ufw enable
+
+5. Install Node.js Dependencies:
+   Navigate to the backend folder and install dependencies:
+   cd backend
+   npm install
+
+   Navigate to the frontend folder and install dependencies:
+   cd ../frontend
+   npm install
+
+6. Run the Application:
+   Return to the root folder and launch the Python script to manage the system:
+   cd ..
    sudo python3 CandyCash.py
 
-5. System Management:
-   Use the dialog interface to:
-   - Open or close the necessary ports.
-   - Start or stop the frontend, backend, and chat services.
-   - Modify or reset the system IP address.
+## About `CandyCash.py`
+
+The `CandyCash.py` script, located at the root of the project, is the central management tool for controlling the application services and configuring the system. Here's what it does:
+
+- **Open All Ports**: Automatically opens the required ports (3000 for the frontend, 4000 for the chat, 5000 for the backend, and 27017 for MongoDB) to ensure all services function correctly.
+- **Close All Ports**: Closes all the aforementioned ports for security when the services are no longer needed.
+- **Start/Stop Frontend**: Allows the user to start or stop the Vue.js frontend interface.
+- **Start/Stop Backend**: Enables the user to start or stop the Node.js backend server.
+- **Start/Stop Chat**: Manages the chat service by enabling or disabling the Socket.io-based server.
+- **Modify IP**: Changes the server's IP address if needed, useful for deploying the system in different environments or with different network configurations.
+- **Reset IP to Default**: Restores the IP address to its default state.
 
 ## Ports Used
 
