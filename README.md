@@ -90,10 +90,10 @@ The `CandyCash.py` script, located at the root of the project, is the central ma
 
 ## Authors 🍭
 
-- Paul Bruno: LinkedIn at https://www.linkedin.com/in/paulbruno33
-- Hugo Andrejewski: LinkedIn at https://www.linkedin.com/in/hugo-andrejewski-a0385b253
-- Mathias Chauvet: LinkedIn at https://www.linkedin.com/in/mathias-chauvet-022447204
+- Paul Bruno: [LinkedIn](https://www.linkedin.com/in/paulbruno33)
+- Hugo Andrejewski: [LinkedIn](https://www.linkedin.com/in/hugo-andrejewski-a0385b253)
+- Mathias Chauvet: [LinkedIn](https://www.linkedin.com/in/mathias-chauvet-022447204)
 
 ## License 🍬
 
-This project is licensed under the GPLv3 License. See the LICENSE file for more information.
+This project is licensed under the GPLv3 License. See the [LICENSE](LICENSE.md) file for more information.
