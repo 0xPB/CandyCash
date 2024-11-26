@@ -65,9 +65,15 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
    `npm install`
 
 7. 🍫 **Install Python3 and Packages**:
+   Installing Python3 and Pip3
    `sudo apt update`
    `sudo apt install -y python3 python3-pip`
+
+   Installing Tkinter module (Ubuntu based distros.)
    `sudo apt install -y python3-tk`
+
+   Alternatively, you can use:
+   `pip install tkinter`
 
 8. 🍡 **Run the Application**:  
    Return to the root folder and launch the Python script to manage the system:  
