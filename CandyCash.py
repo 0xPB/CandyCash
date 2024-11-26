@@ -97,7 +97,36 @@ def replace_string_in_files(target_files, search_string, replace_string):
         else:
             print(f"File not found: {file_path}")
 
-# Function called by the button to open the dialog box
+# Function to run npm install in both frontend and backend directories
+def run_npm_install():
+    def task():
+        try:
+            # Run npm install in frontend
+            frontend_dir = "./frontend"
+            if os.path.exists(frontend_dir):
+                subprocess.run("npm install", cwd=frontend_dir, shell=True, check=True)
+                print(f"npm install completed in {frontend_dir}")
+            else:
+                messagebox.showwarning("Frontend Missing", "The 'frontend' directory does not exist.")
+
+            # Run npm install in backend
+            backend_dir = "./backend"
+            if os.path.exists(backend_dir):
+                subprocess.run("npm install", cwd=backend_dir, shell=True, check=True)
+                print(f"npm install completed in {backend_dir}")
+            else:
+                messagebox.showwarning("Backend Missing", "The 'backend' directory does not exist.")
+
+            messagebox.showinfo("Success", "npm install completed in both frontend and backend.")
+        except subprocess.CalledProcessError as e:
+            messagebox.showerror("Error", f"npm install failed: {e}")
+        except Exception as e:
+            messagebox.showerror("Error", f"Unexpected error: {e}")
+
+    # Run the task in a separate thread to keep the GUI responsive
+    Thread(target=task).start()
+
+# Function to open the dialog box to replace IP
 def open_ip_dialog():
     global ip_current
     target_files = [
@@ -163,7 +192,7 @@ def quit_application():
 # GUI with Tkinter
 root = tk.Tk()
 root.title("CandyCash Manager")
-root.geometry("300x600")
+root.geometry("300x650")
 
 # Apply the ttk "clam" theme
 style = ttk.Style()
@@ -206,6 +235,11 @@ ip_container.pack(pady=5)
 ttk.Button(ip_container, text="Replace IP", command=open_ip_dialog).grid(row=0, column=0, padx=10)
 ttk.Button(ip_container, text="Reset to Base IP", command=reset_to_base_ip).grid(row=0, column=1, padx=10)
 ttk.Button(ip_container, text="Open Firefox", command=open_firefox).grid(row=1, column=0, columnspan=2, pady=10)
+
+# Add npm install button
+frame_npm = ttk.LabelFrame(root, text="NPM Installation")
+frame_npm.pack(pady=10, padx=10, fill="x")
+ttk.Button(frame_npm, text="Run npm install", command=run_npm_install, style="Start.TButton").pack(pady=5)
 
 # Quit application button
 ttk.Button(root, text="Quit Application", command=quit_application, style="Stop.TButton").pack(pady=20)
