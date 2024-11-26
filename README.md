@@ -36,9 +36,11 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
    `sudo nano /etc/mongod.conf`  
 
    Modify the bindIp to allow external connections:  
-   `net:  
+   ```bash
+   net:  
      bindIp: 0.0.0.0  
-     port: 27017`
+     port: 27017
+   ```
 
    Restart MongoDB:  
    `sudo systemctl restart mongod`
