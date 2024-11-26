@@ -64,7 +64,12 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
    `cd ../frontend`  
    `npm install`
 
-7. 🍡 **Run the Application**:  
+7. 🍫 **Install Python3 and Packages**:
+   `sudo apt update`
+   `sudo apt install -y python3 python3-pip`
+   `sudo apt install -y python3-tk`
+
+8. 🍡 **Run the Application**:  
    Return to the root folder and launch the Python script to manage the system:  
    `cd ..`  
    `sudo python3 CandyCash.py`
