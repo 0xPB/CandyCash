@@ -38,7 +38,7 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
    Modify the bindIp to allow external connections:  
    ```bash
    net:  
-     bindIp: 0.0.0.0  
+     bindIp: 0.0.0.0 or your IP, not sure for the moment
      port: 27017
    ```
 
