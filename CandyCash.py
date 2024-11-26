@@ -168,17 +168,6 @@ def reset_to_base_ip():
     messagebox.showinfo("Success", f"The files have been reset to the base IP: {ip_base}.")
     ip_current = None  # Reset state to prevent further unnecessary replacements
 
-# Function to open Firefox with the current IP and port 3000
-def open_firefox():
-    global ip_current
-    ip_to_use = ip_current if ip_current else ip_base  # Use current IP if set, otherwise base IP
-    url = f"http://{ip_to_use}:3000"
-    try:
-        # Open Firefox with the constructed URL
-        subprocess.Popen(["firefox", url])
-    except Exception as e:
-        messagebox.showerror("Error", f"Failed to open Firefox: {e}")
-
 # Function to quit the application
 def quit_application():
     if messagebox.askokcancel("Quit", "Do you really want to quit the application?"):
@@ -234,7 +223,6 @@ ip_container = ttk.Frame(frame_ip)
 ip_container.pack(pady=5)
 ttk.Button(ip_container, text="Replace IP", command=open_ip_dialog).grid(row=0, column=0, padx=10)
 ttk.Button(ip_container, text="Reset to Base IP", command=reset_to_base_ip).grid(row=0, column=1, padx=10)
-ttk.Button(ip_container, text="Open Firefox", command=open_firefox).grid(row=1, column=0, columnspan=2, pady=10)
 
 # Add npm install button
 frame_npm = ttk.LabelFrame(root, text="NPM Installation")
