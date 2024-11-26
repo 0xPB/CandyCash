@@ -45,8 +45,7 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
    Restart MongoDB:  
    `sudo systemctl restart mongod`
 
-3. 🍩 **Install MongoDB Compass** (optional for GUI):  
-   `sudo apt install mongodb-compass`
+3. 🍩 **Install MongoDB Compass** (optional for GUI): [Link](https://www.mongodb.com/docs/compass/current/install/)
 
 4. 🍭 **Install UFW (Uncomplicated Firewall)**:  
    `sudo apt install ufw`
