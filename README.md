@@ -27,8 +27,9 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
 
 ## Installation 🍭✨
 
-1. 🍬 **Install MongoDB**:
-   [Official Documentation](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
+1. 🍬 **Install MongoDB Community Edition**: [Link](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
+
+2. 🍪 **Run MongoDB Community Edition**: [Link](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/#run-mongodb-community-edition)
 
 2. 🍫 **Configure MongoDB**:  
    Open the configuration file:  
