@@ -151,8 +151,8 @@ def quit_application():
 
 # GUI with Tkinter
 root = tk.Tk()
-root.title("System, Frontend & Backend Manager")
-root.geometry("400x600")
+root.title("CandyCash Manager")
+root.geometry("300x550")
 
 # Apply the ttk "clam" theme
 style = ttk.Style()
