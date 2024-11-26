@@ -1,18 +1,18 @@
 import tkinter as tk
 from tkinter import simpledialog, messagebox
+from tkinter import ttk
 from threading import Thread
 import subprocess
 import os
 
-
-# Classe pour gérer les processus
+# Class to manage processes
 class ProcessManager:
     def __init__(self):
         self.processes = {}
 
     def start_process(self, key, command, directory=None):
         if key in self.processes and self.processes[key].poll() is None:
-            messagebox.showwarning("Processus déjà en cours", f"Le processus '{key}' est déjà en cours.")
+            messagebox.showwarning("Process Already Running", f"The process '{key}' is already running.")
             return
 
         try:
@@ -22,97 +22,85 @@ class ProcessManager:
                 process = subprocess.Popen(command, shell=True)
             self.processes[key] = process
         except Exception as e:
-            messagebox.showerror("Erreur", f"Erreur lors du démarrage : {e}")
+            messagebox.showerror("Error", f"Error starting process: {e}")
 
     def stop_process(self, key):
         if key in self.processes and self.processes[key].poll() is None:
             self.processes[key].terminate()
             self.processes[key].wait()
-            messagebox.showinfo("Succès", f"Le processus '{key}' a été arrêté.")
+            messagebox.showinfo("Success", f"The process '{key}' has been stopped.")
         else:
-            messagebox.showwarning("Aucun processus", f"Aucun processus actif pour '{key}'.")
+            messagebox.showwarning("No Active Process", f"No active process found for '{key}'.")
 
-
-# Instancier le gestionnaire de processus
+# Instantiate the process manager
 process_manager = ProcessManager()
 
-# Variables globales pour IP
-ip_base = "A.B.C.D"  # Remplacez "A.B.C.D" par l'IP de base souhaitée
-ip_actuelle = None  # Cette variable stockera la dernière IP saisie
+# Global variables for IP
+ip_base = "A.B.C.D"  # Replace "A.B.C.D" with the desired base IP
+ip_current = None  # This variable will store the last entered IP
 
-
-# Gestion des ports avec UFW
+# Port management with UFW
 ports = [3000, 4000, 5000, 27017]
-
 
 def open_all_ports():
     def task():
         try:
             for port in ports:
                 subprocess.run(f"sudo ufw allow {port}", shell=True, check=True)
-            messagebox.showinfo("Succès", "Tous les ports ont été ouverts avec UFW.")
+            messagebox.showinfo("Success", "All ports have been opened with UFW.")
         except subprocess.CalledProcessError as e:
-            messagebox.showerror("Erreur", f"Erreur lors de l'ouverture des ports : {e}")
+            messagebox.showerror("Error", f"Error opening ports: {e}")
     Thread(target=task).start()
-
 
 def close_all_ports():
     def task():
         try:
             for port in ports:
                 subprocess.run(f"sudo ufw delete allow {port}", shell=True, check=True)
-            messagebox.showinfo("Succès", "Tous les ports ont été fermés avec UFW.")
+            messagebox.showinfo("Success", "All ports have been closed with UFW.")
         except subprocess.CalledProcessError as e:
-            messagebox.showerror("Erreur", f"Erreur lors de la fermeture des ports : {e}")
+            messagebox.showerror("Error", f"Error closing ports: {e}")
     Thread(target=task).start()
 
-
-# Fonctions pour démarrer/arrêter les tâches
+# Functions to start/stop tasks
 def run_frontend():
     process_manager.start_process("frontend", "npm run dev", "./frontend")
-
 
 def stop_frontend():
     process_manager.stop_process("frontend")
 
-
 def run_backend():
     process_manager.start_process("backend", "npm start", "./backend")
-
 
 def stop_backend():
     process_manager.stop_process("backend")
 
-
 def run_chat():
     process_manager.start_process("chat", "node socket.js", "./backend")
-
 
 def stop_chat():
     process_manager.stop_process("chat")
 
-
-# Fonction pour remplacer une chaîne dans les fichiers
-def remplacer_chaine_fichiers(fichiers_cibles, chaine_recherche, chaine_remplacement):
-    for chemin_fichier in fichiers_cibles:
-        if os.path.exists(chemin_fichier):
+# Function to replace a string in files
+def replace_string_in_files(target_files, search_string, replace_string):
+    for file_path in target_files:
+        if os.path.exists(file_path):
             try:
-                with open(chemin_fichier, 'r', encoding='utf-8') as f:
-                    contenu = f.read()
-                contenu_modifie = contenu.replace(chaine_recherche, chaine_remplacement)
-                with open(chemin_fichier, 'w', encoding='utf-8') as f:
-                    f.write(contenu_modifie)
-                print(f"Modifications effectuées dans : {chemin_fichier}")
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                updated_content = content.replace(search_string, replace_string)
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    f.write(updated_content)
+                print(f"Changes applied to: {file_path}")
             except Exception as e:
-                print(f"Erreur avec le fichier {chemin_fichier} : {e}")
+                print(f"Error with file {file_path}: {e}")
         else:
-            print(f"Fichier introuvable : {chemin_fichier}")
+            print(f"File not found: {file_path}")
 
-
-# Fonction appelée par le bouton pour ouvrir la boîte de dialogue
-def ouvrir_boite_dialogue():
-    global ip_actuelle
-    fichiers_cibles = [
+# Function called by the button to open the dialog box
+def open_ip_dialog():
+    global ip_current
+    target_files = [
         "backend/.env",
         "backend/socket.js",
         "frontend/src/components/FearAndGreedIndicator.vue",
@@ -120,27 +108,26 @@ def ouvrir_boite_dialogue():
         "frontend/src/views/ChatRoom.vue"
     ]
 
-    chaine_remplacement = simpledialog.askstring(
-        "Entrer une adresse IP",
-        f"Entrez l'adresse IP de remplacement pour '{ip_base}' :"
+    replace_string = simpledialog.askstring(
+        "Enter IP Address",
+        f"Enter the replacement IP address for '{ip_base}':"
     )
 
-    if chaine_remplacement:
-        remplacer_chaine_fichiers(fichiers_cibles, ip_base, chaine_remplacement)
-        ip_actuelle = chaine_remplacement  # Mémoriser la nouvelle IP
-        messagebox.showinfo("Succès", f"Les fichiers ont été mis à jour avec la nouvelle IP : {chaine_remplacement}.")
+    if replace_string:
+        replace_string_in_files(target_files, ip_base, replace_string)
+        ip_current = replace_string  # Remember the new IP
+        messagebox.showinfo("Success", f"The files have been updated with the new IP: {replace_string}.")
     else:
-        messagebox.showwarning("Annulé", "Aucune modification effectuée.")
+        messagebox.showwarning("Cancelled", "No changes were made.")
 
-
-# Fonction pour remettre l'IP de base
-def remettre_ip_base():
-    global ip_actuelle
-    if ip_actuelle is None:
-        messagebox.showwarning("Aucune IP à réinitialiser", "Aucune IP précédente à remplacer.")
+# Function to reset to the base IP
+def reset_to_base_ip():
+    global ip_current
+    if ip_current is None:
+        messagebox.showwarning("No IP to Reset", "No previous IP to reset.")
         return
 
-    fichiers_cibles = [
+    target_files = [
         "backend/.env",
         "backend/socket.js",
         "frontend/src/components/FearAndGreedIndicator.vue",
@@ -148,43 +135,71 @@ def remettre_ip_base():
         "frontend/src/views/ChatRoom.vue"
     ]
 
-    remplacer_chaine_fichiers(fichiers_cibles, ip_actuelle, ip_base)
-    messagebox.showinfo("Succès", f"Les fichiers ont été réinitialisés à l'IP de base : {ip_base}.")
-    ip_actuelle = None  # Réinitialiser l'état pour empêcher d'autres remplacements inutiles
+    replace_string_in_files(target_files, ip_current, ip_base)
+    messagebox.showinfo("Success", f"The files have been reset to the base IP: {ip_base}.")
+    ip_current = None  # Reset state to prevent further unnecessary replacements
 
+# Function to quit the application
+def quit_application():
+    if messagebox.askokcancel("Quit", "Do you really want to quit the application?"):
+        # Stop all running processes
+        for key in list(process_manager.processes.keys()):
+            process_manager.stop_process(key)
+        
+        # Close the main window
+        root.destroy()
 
-# Interface graphique avec Tkinter
+# GUI with Tkinter
 root = tk.Tk()
-root.title("Gestion Système, Frontend & Backend")
+root.title("System, Frontend & Backend Manager")
+root.geometry("400x600")
 
-# Section Ports
-frame_ports = tk.Frame(root)
-frame_ports.pack(pady=10)
-tk.Button(frame_ports, text="Ouvrir tous les ports", command=open_all_ports).pack(side=tk.LEFT, padx=5)
-tk.Button(frame_ports, text="Fermer tous les ports", command=close_all_ports).pack(side=tk.LEFT, padx=5)
+# Apply the ttk "clam" theme
+style = ttk.Style()
+style.theme_use("clam")
 
-# Section Frontend/Backend avec boutons d'arrêt
-frame_frontend = tk.Frame(root)
-frame_frontend.pack(pady=5)
-tk.Button(frame_frontend, text="Démarrer Frontend", command=run_frontend).pack(side=tk.LEFT)
-tk.Button(frame_frontend, text="Arrêter Frontend", command=stop_frontend).pack(side=tk.LEFT)
+# Define styles for Start and Stop buttons
+style.configure("Start.TButton", foreground="white", background="green", font=("Arial", 10, "bold"))
+style.configure("Stop.TButton", foreground="white", background="red", font=("Arial", 10, "bold"))
 
-frame_backend = tk.Frame(root)
-frame_backend.pack(pady=5)
-tk.Button(frame_backend, text="Démarrer Backend", command=run_backend).pack(side=tk.LEFT)
-tk.Button(frame_backend, text="Arrêter Backend", command=stop_backend).pack(side=tk.LEFT)
+# Ports section
+frame_ports = ttk.LabelFrame(root, text="Port Management")
+frame_ports.pack(pady=10, padx=10, fill="x")
+ports_container = ttk.Frame(frame_ports)
+ports_container.pack(pady=5)
+ttk.Button(ports_container, text="Open All Ports", command=open_all_ports, style="Start.TButton").grid(row=0, column=0, padx=10)
+ttk.Button(ports_container, text="Close All Ports", command=close_all_ports, style="Stop.TButton").grid(row=0, column=1, padx=10)
 
-frame_chat = tk.Frame(root)
-frame_chat.pack(pady=5)
-tk.Button(frame_chat, text="Démarrer Chat", command=run_chat).pack(side=tk.LEFT)
-tk.Button(frame_chat, text="Arrêter Chat", command=stop_chat).pack(side=tk.LEFT)
+# Frontend/Backend/Chat sections
+def create_service_frame(service_name, start_command, stop_command):
+    frame = ttk.LabelFrame(root, text=f"{service_name} Management")
+    frame.pack(pady=10, padx=10, fill="x")
 
-# Boutons pour remplacer et remettre l'IP de base
-btn_remplacer_ip = tk.Button(root, text="Remplacer l'IP", command=ouvrir_boite_dialogue)
-btn_remplacer_ip.pack(pady=10)
+    # Create a container for buttons and center them
+    button_container = ttk.Frame(frame)
+    button_container.pack(pady=5)
 
-btn_remettre_ip_base = tk.Button(root, text="Remettre l'IP de base", command=remettre_ip_base)
-btn_remettre_ip_base.pack(pady=10)
+    # Add buttons side by side
+    ttk.Button(button_container, text=f"Start {service_name}", command=start_command, style="Start.TButton").grid(row=0, column=0, padx=10)
+    ttk.Button(button_container, text=f"Stop {service_name}", command=stop_command, style="Stop.TButton").grid(row=0, column=1, padx=10)
 
-# Boucle principale Tkinter
+create_service_frame("Frontend", run_frontend, stop_frontend)
+create_service_frame("Backend", run_backend, stop_backend)
+create_service_frame("Chat", run_chat, stop_chat)
+
+# Replace and reset IP buttons
+frame_ip = ttk.LabelFrame(root, text="IP Address Management")
+frame_ip.pack(pady=10, padx=10, fill="x")
+ip_container = ttk.Frame(frame_ip)
+ip_container.pack(pady=5)
+ttk.Button(ip_container, text="Replace IP", command=open_ip_dialog).grid(row=0, column=0, padx=10)
+ttk.Button(ip_container, text="Reset to Base IP", command=reset_to_base_ip).grid(row=0, column=1, padx=10)
+
+# Quit application button
+ttk.Button(root, text="Quit Application", command=quit_application, style="Stop.TButton").pack(pady=20)
+
+# Modify the main window close behavior (red cross)
+root.protocol("WM_DELETE_WINDOW", quit_application)
+
+# Main Tkinter loop
 root.mainloop()
