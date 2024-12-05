@@ -8,7 +8,7 @@ const errorMessage = ref(null);
 // Fonction pour récupérer les données depuis l'API backend
 async function fetchFearAndGreedIndex() {
   try {
-    const response = await axios.get('http://A.B.C.D:5000/api/indicators/fear-and-greed');
+    const response = await axios.get('http://192.168.233.131:5000/api/indicators/fear-and-greed');
     console.log('Fear and Greed Index Data:', response.data); // Log des données pour débogage
     fearAndGreedData.value = response.data.data;
   } catch (err) {

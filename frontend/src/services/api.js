@@ -10,10 +10,10 @@ const CMC_API = axios.create({
 
 // URL de base pour le backend
 const API = axios.create({
-  baseURL: 'http://A.B.C.D:5000/api', // Assurez-vous que cela pointe bien vers votre backend
+  baseURL: 'http://192.168.233.131:5000/api', // Assurez-vous que cela pointe bien vers votre backend
 });
 
-const API_URL = 'http://A.B.C.D:5000/api';  // Votre URL backend
+const API_URL = 'http://192.168.233.131:5000/api';  // Votre URL backend
 
 // Fonction de connexion d'utilisateur
 export async function loginUser(credentials) {
