@@ -27,11 +27,11 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
 
 ## Installation 🍭✨
 
-1. 🍬 **Install MongoDB Community Edition**: [Link](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
+1. 🍬 **Install MongoD Community Edition**: [Link](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
 
 2. 🍩 **Install MongoDB Compass** (optional for GUI): [Link](https://www.mongodb.com/docs/compass/current/install/)
 
-3. 🍫 **Configure MongoDB**:  
+3. 🍫 **Configure MongoD**:  
    Open the configuration file:  
    `sudo nano /etc/mongod.conf`  
 
@@ -41,8 +41,14 @@ CandyCash is a playful financial dashboard that allows users to track stock perf
      bindIp: 0.0.0.0
      port: 27017
    ```   
-   Restart MongoDB:  
+   Restart MongoD:  
    `sudo systemctl restart mongod`
+
+   Enable MongoD (automatic launch when machine is up):
+   `sudo systemctl enable mongod`
+
+   If not enabled need to type:
+   `sudo systemctl start mongod`
 
 4. 🍪 **Run MongoDB Community Edition**: [Link](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/#run-mongodb-community-edition)
 
