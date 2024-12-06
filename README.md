@@ -95,8 +95,8 @@ The `CandyCash.py` script, located at the root of the project, is the central ma
 - 🍫 **Start/Stop Frontend**: Allows the user to start or stop the Vue.js frontend interface.
 - 🍪 **Start/Stop Backend**: Enables the user to start or stop the Node.js backend server.
 - ⭐ **Start/Stop Chat**: Manages the chat service by enabling or disabling the Socket.io-based server.
-- 🍡 **Modify IP**: Changes the server's IP address. **Important**: After clicking the "Modify IP" button, you must click the "Reset IP" button before exiting the Python script to ensure the IP address is restored correctly.
-- ✨ **Reset IP to Default**: Restores the IP address to its default state.
+- ✨ **Auto IP Change**: Auto change the IP address to yours.
+- 🍩 **Auto NPM installs** : Automatic install of npm in backend and frontend.
 
 ## Ports Used 🍩🍫
 
