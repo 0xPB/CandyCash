@@ -3,19 +3,19 @@ import App from './App.vue';
 import router from './router';
 import { createPinia } from 'pinia';
 
-// Import the candy images
+// Importation des images de bonbons
 import bleuImage from './assets/images/bleu.png';
 import rougeImage from './assets/images/rouge.png';
 import multicoloreImage from './assets/images/multicolore.png';
 import violetImage from './assets/images/violet.png';
 
-// Initialize the Vue app
+// Initialisation de l'application Vue
 const app = createApp(App);
-app.use(createPinia());
-app.use(router);
-app.mount('#app');
+app.use(createPinia()); // Gestion de l'état global avec Pinia
+app.use(router); // Gestion de la navigation avec le router Vue
+app.mount('#app'); // Montage de l'application sur l'élément DOM avec l'ID #app
 
-// Candy images array
+// Tableau contenant les informations des bonbons (nom et image associée)
 const candyImages = [
   { name: "bleu", src: bleuImage },
   { name: "rouge", src: rougeImage },
@@ -23,63 +23,58 @@ const candyImages = [
   { name: "violet", src: violetImage }
 ];
 
-// Function to generate a random number between min and max
-function getRandomBetween(min, max) {
-  return Math.random() * (max - min) + min;
-}
+// Fonction utilitaire : génère un nombre aléatoire entre min et max
+const getRandomBetween = (min, max) => Math.random() * (max - min) + min;
 
-// Function to create and animate candies
-function createCandy(image) {
-  const candyContainer = document.getElementById('candy-container');
-  if (!candyContainer) {
+// Fonction pour créer un bonbon et l'animer
+const createCandy = (image) => {
+  const candyContainer = document.getElementById('candy-container'); // Récupération du conteneur de bonbons
+  if (!candyContainer) { // Vérification si le conteneur existe
     console.error('Candy container not found!');
     return;
   }
 
-  // Create the candy element
+  const screenWidth = window.innerWidth; // Largeur de l'écran
+  const screenHeight = window.innerHeight; // Hauteur de l'écran
+
+  // Propriétés aléatoires pour le bonbon
+  const randomProps = {
+    left: getRandomBetween(0, screenWidth - 40), // Position horizontale aléatoire
+    duration: getRandomBetween(3, 7), // Durée de la chute entre 3 et 7 secondes
+    rotation: getRandomBetween(360, 1080), // Rotation aléatoire entre 360° et 1080°
+  };
+
+  // Création de l'élément bonbon
   const candy = document.createElement('div');
-  candy.className = 'candy';
-  candy.style.backgroundImage = `url(${image.src})`;
-  candy.style.position = 'absolute';
-  candy.style.width = '40px';
-  candy.style.height = '40px';
+  candy.className = 'candy'; // Ajout de la classe CSS
+  candy.style.backgroundImage = `url(${image.src})`; // Définition de l'image de fond
+  candy.style.left = `${randomProps.left}px`; // Position horizontale
+  candy.style.top = `-50px`; // Position initiale (au-dessus de l'écran)
+  candy.style.transition = `top ${randomProps.duration}s linear, transform ${randomProps.duration}s linear`;
 
-  // Set random initial position, rotation, and animation duration
-  const screenWidth = window.innerWidth;
-  const screenHeight = window.innerHeight;
-  const randomLeft = getRandomBetween(0, screenWidth - 40);
-  const randomDuration = getRandomBetween(3, 7); // Duration between 3 and 7 seconds
-  const randomRotation = getRandomBetween(360, 1080); // Rotation between 360° and 1080°
-
-  candy.style.left = `${randomLeft}px`;
-  candy.style.top = `-50px`; // Start above the screen
-  candy.style.transition = `top ${randomDuration}s linear, transform ${randomDuration}s linear`;
-
-  // Append the candy to the container
+  // Ajout du bonbon au conteneur
   candyContainer.appendChild(candy);
 
-  // Animate the candy to fall and rotate
+  // Animation du bonbon (chute et rotation)
   setTimeout(() => {
-    candy.style.top = `${screenHeight}px`; // Move below the screen
-    candy.style.transform = `rotate(${randomRotation}deg)`; // Rotate during the fall
-  }, 100); // Small delay to allow the initial position to render
+    candy.style.top = `${screenHeight}px`; // Fait tomber le bonbon sous l'écran
+    candy.style.transform = `rotate(${randomProps.rotation}deg)`; // Fait tourner le bonbon
+  }, 100); // Délai pour permettre le rendu initial
 
-  // Remove the candy after it falls
-  setTimeout(() => {
-    candy.remove();
-  }, randomDuration * 1000);
-}
+  // Suppression du bonbon après la fin de l'animation
+  setTimeout(() => candy.remove(), randomProps.duration * 1000);
+};
 
-// Function to generate 7 candies with random positions, speeds, and rotations
-function generateCandies() {
-  for (let i = 0; i < 7; i++) {
-    const randomCandy = candyImages[Math.floor(Math.random() * candyImages.length)];
-    createCandy(randomCandy);
+// Fonction pour générer plusieurs bonbons
+const generateCandies = () => {
+  for (let i = 0; i < 7; i++) { // Génère 7 bonbons
+    const randomCandy = candyImages[Math.floor(Math.random() * candyImages.length)]; // Sélection d'une image aléatoire
+    createCandy(randomCandy); // Création et animation du bonbon
   }
-}
+};
 
-// Infinite candy generation
+// Génération infinie de bonbons
 document.addEventListener('DOMContentLoaded', () => {
-  generateCandies(); // Initial generation
-  setInterval(generateCandies, 8000); // Generate 7 new candies every 8 seconds
+  generateCandies(); // Génération initiale des bonbons
+  setInterval(generateCandies, 8000); // Génère 7 bonbons toutes les 8 secondes
 });

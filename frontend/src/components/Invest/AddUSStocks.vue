@@ -74,7 +74,7 @@ async function handleAddInvestment() {
         </option>
       </select>
 
-      <label for="price">Price:</label>
+      <label for="price"> Price:</label>
       <input v-model.number="investment.price" type="number" id="price" step="0.01" required />
 
       <label for="quantity">Quantity:</label>

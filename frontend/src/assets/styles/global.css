@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Emilys+Candy&display=swap');
 /* Général */
 body {
-  font-family: Arial, sans-serif;
   background: linear-gradient(135deg, #ffd1dc, #ffb3b3);
   color: #444;
   margin: 0;
@@ -206,7 +205,6 @@ div {
   height: 100%;
   pointer-events: none; /* Empêche d'interagir avec les bonbons */
   z-index: 1 !important; /* Au-dessus de l'arrière-plan mais derrière le contenu */
-  text-align: initial;
   overflow: hidden; /* Empêche les barres de défilement */
 }
 
@@ -217,33 +215,10 @@ div {
   height: 40px;
   background-size: cover;
   background-repeat: no-repeat;
-  animation: fall linear infinite; /* Animation de chute */
-  text-align: initial;
 }
 
 /* Éléments interactifs */
 .container, button, h1, h2, input, textarea, canvas {
   position: relative;
   z-index: 20 !important; /* Au-dessus des bonbons */
-}
-
-
-/* Animation des bonbons */
-@keyframes fall {
-  0% {
-    top: -50px; /* Commence au-dessus de l'écran */
-    transform: translateX(0) rotate(0deg); /* Pas de rotation initiale */
-  }
-  100% {
-    top: 110%; /* Tombe sous l'écran */
-    transform: translateX(30px) rotate(720deg); /* Rotation double */
-  }
-}
-
-
-
-.candy {
-  position: absolute;
-  left: 0; /* Point de départ neutre pour éviter toute influence de text-align */
-  transform: translateX(calc(${Math.random() * 100}vw))
 }
